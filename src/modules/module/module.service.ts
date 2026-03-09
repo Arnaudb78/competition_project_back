@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { ModuleEntity, ModuleDocument } from './schemas/module.schema';
@@ -11,8 +11,15 @@ export class ModuleService {
     private moduleModel: Model<ModuleDocument>,
   ) {}
 
-  create(dto: CreateModuleDto) {
-    return this.moduleModel.create(dto);
+  async create(dto: CreateModuleDto) {
+    try {
+      return await this.moduleModel.create(dto);
+    } catch (error: any) {
+      if (error?.code === 11000) {
+        throw new ConflictException('Ce numéro de module est déjà utilisé');
+      }
+      throw error;
+    }
   }
 
   findAllPublic() {
@@ -31,20 +38,22 @@ export class ModuleService {
     return this.moduleModel.findByIdAndUpdate(id, dto, { new: true });
   }
 
-  // Bulk update positions pour le drag & drop
-  async updatePositions(
-    positions: { id: string; x: number; y: number }[],
-  ): Promise<any> {
-    const ops = positions.map(({ id, x, y }) => ({
-      updateOne: {
-        filter: { _id: id },
-        update: { $set: { position: { x, y } } },
-      },
-    }));
-    return this.moduleModel.bulkWrite(ops);
-  }
-
   remove(id: string) {
     return this.moduleModel.findByIdAndDelete(id);
+  }
+
+  async reorder(ids: string[]) {
+    // On passe d'abord par des nombres négatifs temporaires pour éviter
+    // les conflits d'unicité lors des updates intermédiaires
+    await Promise.all(
+      ids.map((id, i) =>
+        this.moduleModel.findByIdAndUpdate(id, { number: -(i + 1) }),
+      ),
+    );
+    await Promise.all(
+      ids.map((id, i) =>
+        this.moduleModel.findByIdAndUpdate(id, { number: i + 1 }),
+      ),
+    );
   }
 }

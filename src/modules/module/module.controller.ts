@@ -34,11 +34,9 @@ export class ModuleController {
     return this.moduleService.findOne(id);
   }
 
-  @Patch('positions')
-  updatePositions(
-    @Body() body: { positions: { id: string; x: number; y: number }[] },
-  ): Promise<any> {
-    return this.moduleService.updatePositions(body.positions);
+  @Patch('reorder')
+  reorder(@Body() body: { ids: string[] }) {
+    return this.moduleService.reorder(body.ids);
   }
 
   @Patch(':id')

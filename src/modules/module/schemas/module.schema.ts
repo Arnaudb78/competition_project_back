@@ -14,7 +14,7 @@ export class ModuleEntity {
   @Prop()
   cartel!: string;
 
-  @Prop({ enum: ['audio', 'video', 'none'], default: 'none' })
+  @Prop({ enum: ['audio', 'video', 'image', 'none'], default: 'none' })
   mediaType!: string;
 
   @Prop()
