@@ -3,7 +3,7 @@ import { HydratedDocument } from 'mongoose';
 
 export type ModuleDocument = HydratedDocument<ModuleEntity>;
 
-@Schema({ timestamps: true })
+@Schema({ timestamps: true, collection: 'modules' })
 export class ModuleEntity {
   @Prop({ required: true, unique: true })
   number!: number;
@@ -22,9 +22,6 @@ export class ModuleEntity {
 
   @Prop({ type: [String], default: [] })
   images!: string[];
-
-  @Prop({ type: { x: Number, y: Number }, default: { x: 0, y: 0 } })
-  position!: { x: number; y: number };
 
   @Prop({ default: true })
   isVisible!: boolean;

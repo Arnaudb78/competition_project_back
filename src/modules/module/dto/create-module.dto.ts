@@ -5,5 +5,4 @@ export class CreateModuleDto {
   mediaType?: 'audio' | 'video' | 'none';
   mediaUrl?: string;
   images?: string[];
-  position?: { x: number; y: number };
 }
