@@ -18,7 +18,10 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
 
-  async validate(payload: { sub: string; email: string }) {
+  async validate(payload: { sub: string; email: string; role: string }) {
+    // Les routes admin n'acceptent que les tokens avec role: 'admin'
+    if (payload.role !== 'admin') throw new UnauthorizedException();
+
     const user = await this.userModel.findById(payload.sub).select('-password');
     if (!user || !user.isActive) throw new UnauthorizedException();
     return user;

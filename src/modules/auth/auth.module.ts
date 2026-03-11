@@ -7,11 +7,15 @@ import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
+import { JwtAccountStrategy } from './strategies/jwt-account.strategy';
+import { JwtAccountGuard } from './guards/jwt-account.guard';
 import { UserEntity, UserSchema } from '../user/schemas/user.schema';
+import { AccountModule } from '../account/account.module';
 
 @Module({
   imports: [
     PassportModule,
+    AccountModule,
     MongooseModule.forFeature([{ name: UserEntity.name, schema: UserSchema }]),
     JwtModule.registerAsync({
       imports: [ConfigModule],
@@ -23,7 +27,13 @@ import { UserEntity, UserSchema } from '../user/schemas/user.schema';
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, JwtStrategy, JwtAuthGuard],
-  exports: [JwtAuthGuard],
+  providers: [
+    AuthService,
+    JwtStrategy,
+    JwtAuthGuard,
+    JwtAccountStrategy,
+    JwtAccountGuard,
+  ],
+  exports: [JwtAuthGuard, JwtAccountGuard],
 })
 export class AuthModule {}

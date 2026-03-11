@@ -25,6 +25,12 @@ export class ModuleEntity {
 
   @Prop({ default: true })
   isVisible!: boolean;
+
+  @Prop()
+  mapX?: number;
+
+  @Prop()
+  mapY?: number;
 }
 
 export const ModuleSchema = SchemaFactory.createForClass(ModuleEntity);
