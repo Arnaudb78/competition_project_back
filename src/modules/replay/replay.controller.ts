@@ -1,10 +1,17 @@
 import {
-  Controller, Get, Post, Patch, Delete,
-  Param, Body, UseGuards,
+  Controller,
+  Get,
+  Post,
+  Patch,
+  Delete,
+  Param,
+  Body,
+  UseGuards,
 } from '@nestjs/common';
 import { ReplayService } from './replay.service';
-import { CreateReplayDto } from './dto/replay.dto';
+import { CreateReplayDto, AddCommentDto } from './dto/replay.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { JwtAccountGuard } from '../auth/guards/jwt-account.guard';
 
 @Controller('replays')
 export class ReplayController {
@@ -36,5 +43,11 @@ export class ReplayController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.replayService.remove(id);
+  }
+
+  @UseGuards(JwtAccountGuard)
+  @Post(':id/comment')
+  addComment(@Param('id') id: string, @Body() dto: AddCommentDto) {
+    return this.replayService.addComment(id, dto);
   }
 }

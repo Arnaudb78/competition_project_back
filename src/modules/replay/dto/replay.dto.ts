@@ -6,3 +6,8 @@ export class CreateReplayDto {
   thumbnailUrl?: string;
   isVisible?: boolean;
 }
+
+export class AddCommentDto {
+  author!: string;
+  text!: string;
+}
