@@ -11,7 +11,7 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 import { ModuleService } from './module.service';
-import { CreateModuleDto } from './dto/create-module.dto';
+import { CreateModuleDto, UpdateModuleDto } from './dto/create-module.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 
 @Controller('modules')
@@ -47,7 +47,7 @@ export class ModuleController {
 
   @UseGuards(JwtAuthGuard)
   @Patch(':id')
-  update(@Param('id') id: string, @Body() dto: Partial<CreateModuleDto>) {
+  update(@Param('id') id: string, @Body() dto: UpdateModuleDto) {
     return this.moduleService.update(id, dto);
   }
 

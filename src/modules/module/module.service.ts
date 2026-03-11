@@ -7,7 +7,7 @@ import {
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { ModuleEntity, ModuleDocument } from './schemas/module.schema';
-import { CreateModuleDto } from './dto/create-module.dto';
+import { CreateModuleDto, UpdateModuleDto } from './dto/create-module.dto';
 
 const QUESTION_POPULATE = ['childQuestion', 'adultQuestion'];
 
@@ -43,9 +43,24 @@ export class ModuleService {
     return this.moduleModel.findById(id).populate(QUESTION_POPULATE);
   }
 
-  update(id: string, dto: Partial<CreateModuleDto>) {
+  update(id: string, dto: UpdateModuleDto) {
+    const $set: Record<string, unknown> = {};
+    const $unset: Record<string, 1> = {};
+
+    for (const [key, value] of Object.entries(dto)) {
+      if (value === null) {
+        $unset[key] = 1;
+      } else {
+        $set[key] = value;
+      }
+    }
+
+    const update: Record<string, unknown> = {};
+    if (Object.keys($set).length) update.$set = $set;
+    if (Object.keys($unset).length) update.$unset = $unset;
+
     return this.moduleModel
-      .findByIdAndUpdate(id, dto, { new: true })
+      .findByIdAndUpdate(id, update, { new: true })
       .populate(QUESTION_POPULATE);
   }
 
