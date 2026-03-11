@@ -7,6 +7,8 @@ import {
   Param,
   Body,
   UseGuards,
+  HttpCode,
+  HttpStatus,
 } from '@nestjs/common';
 import { ModuleService } from './module.service';
 import { CreateModuleDto } from './dto/create-module.dto';
@@ -53,6 +55,27 @@ export class ModuleController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.moduleService.remove(id);
+  }
+
+  // ─── Questions liées au module ─────────────────────────────────────────────
+
+  @UseGuards(JwtAuthGuard)
+  @Patch(':id/questions')
+  attachQuestion(
+    @Param('id') id: string,
+    @Body() body: { ageGroup: 'child' | 'adult'; questionId: string },
+  ) {
+    return this.moduleService.attachQuestion(id, body.ageGroup, body.questionId);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @HttpCode(HttpStatus.OK)
+  @Delete(':id/questions/:ageGroup')
+  detachQuestion(
+    @Param('id') id: string,
+    @Param('ageGroup') ageGroup: 'child' | 'adult',
+  ) {
+    return this.moduleService.detachQuestion(id, ageGroup);
   }
 
   // Doit rester en dernier — capture tout ce qui n'a pas matché avant

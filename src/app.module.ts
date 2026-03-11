@@ -9,6 +9,7 @@ import { AuthModule } from './modules/auth/auth.module';
 import { UploadModule } from './modules/upload/upload.module';
 import { AccountModule } from './modules/account/account.module';
 import { GroupModule } from './modules/group/group.module';
+import { QuestionModule } from './modules/question/question.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { GroupModule } from './modules/group/group.module';
     UploadModule,
     AccountModule,
     GroupModule,
+    QuestionModule,
   ],
   controllers: [AppController],
   providers: [AppService],

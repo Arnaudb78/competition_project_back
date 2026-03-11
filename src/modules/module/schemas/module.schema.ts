@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { HydratedDocument } from 'mongoose';
+import { HydratedDocument, Types } from 'mongoose';
 
 export type ModuleDocument = HydratedDocument<ModuleEntity>;
 
@@ -31,6 +31,12 @@ export class ModuleEntity {
 
   @Prop()
   mapY?: number;
+
+  @Prop({ type: Types.ObjectId, ref: 'QuestionEntity' })
+  childQuestion?: Types.ObjectId;
+
+  @Prop({ type: Types.ObjectId, ref: 'QuestionEntity' })
+  adultQuestion?: Types.ObjectId;
 }
 
 export const ModuleSchema = SchemaFactory.createForClass(ModuleEntity);
