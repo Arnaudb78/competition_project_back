@@ -10,6 +10,8 @@ import { UploadModule } from './modules/upload/upload.module';
 import { AccountModule } from './modules/account/account.module';
 import { GroupModule } from './modules/group/group.module';
 import { QuestionModule } from './modules/question/question.module';
+import { ReplayModule } from './modules/replay/replay.module';
+import { ClipModule } from './modules/clip/clip.module';
 
 @Module({
   imports: [
@@ -27,6 +29,8 @@ import { QuestionModule } from './modules/question/question.module';
     AccountModule,
     GroupModule,
     QuestionModule,
+    ReplayModule,
+    ClipModule,
   ],
   controllers: [AppController],
   providers: [AppService],
