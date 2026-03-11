@@ -1,98 +1,191 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# Mirokaï Experience — API Backend
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+API REST du projet Mirokaï Experience, construite avec **NestJS**, **MongoDB** et **AWS S3**.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+Elle est consommée par les 3 frontends du projet :
+- `front-admin-mirokai` — interface d'administration
+- `competition-front-visitor` — parcours visiteur mobile
+- `competition-front-game` — jeu Phaser en salle
 
-## Description
+---
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## Architecture
 
-## Project setup
-
-```bash
-$ pnpm install
+```
+┌─────────────────────────────────────────────────┐
+│                  NestJS API                      │
+│                                                 │
+│  /api/auth      → Authentification admin (JWT)  │
+│  /api/modules   → CRUD des modules              │
+│  /api/upload    → Upload fichiers vers S3        │
+│  /api/groups    → Groupes visiteurs & scores    │
+└────────────┬────────────────┬───────────────────┘
+             │                │
+        MongoDB Atlas       AWS S3
+        (données)          (médias)
 ```
 
-## Compile and run the project
+---
+
+## Prérequis
+
+- **Node.js** 20+
+- **pnpm** — `npm install -g pnpm`
+- Un cluster **MongoDB** (Atlas ou local)
+- Un bucket **AWS S3** avec un utilisateur IAM
+
+---
+
+## Installation
 
 ```bash
-# development
-$ pnpm run start
-
-# watch mode
-$ pnpm run start:dev
-
-# production mode
-$ pnpm run start:prod
+git clone <url-du-repo>
+cd back-project
+pnpm install
 ```
 
-## Run tests
+---
+
+## Configuration
+
+Copier le fichier d'exemple :
 
 ```bash
-# unit tests
-$ pnpm run test
-
-# e2e tests
-$ pnpm run test:e2e
-
-# test coverage
-$ pnpm run test:cov
+cp .env.example .env
 ```
 
-## Deployment
+Remplir les variables :
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+```env
+# Serveur
+PORT=3001
+JWT_SECRET=un_secret_long_et_aleatoire
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+# MongoDB
+MONGODB_URI=mongodb+srv://user:password@cluster.mongodb.net/mirokai
+
+# AWS S3
+AWS_REGION=eu-west-3
+AWS_ACCESS_KEY_ID=AKIAXXXXXXXXXXXXXXXX
+AWS_SECRET_ACCESS_KEY=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+AWS_MEDIA_BUCKET=nom-du-bucket-s3
+```
+
+> Le bucket S3 doit avoir une politique publique en lecture pour que les URLs des médias fonctionnent.
+
+---
+
+## Lancer en développement
 
 ```bash
-$ pnpm install -g @nestjs/mau
-$ mau deploy
+pnpm start:dev
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+L'API tourne sur `http://localhost:3001/api`
 
-## Resources
+---
 
-Check out a few resources that may come in handy when working with NestJS:
+## Routes de l'API
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+### Authentification
+| Méthode | Route | Auth | Description |
+|---|---|---|---|
+| `POST` | `/api/auth/login` | Non | Connexion admin → retourne un JWT |
 
-## Support
+### Modules
+| Méthode | Route | Auth | Description |
+|---|---|---|---|
+| `GET` | `/api/modules` | Non | Liste tous les modules |
+| `GET` | `/api/modules/:id` | Non | Détail d'un module |
+| `POST` | `/api/modules` | JWT | Créer un module |
+| `PATCH` | `/api/modules/:id` | JWT | Modifier un module |
+| `DELETE` | `/api/modules/:id` | JWT | Supprimer un module |
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+### Upload (médias)
+| Méthode | Route | Auth | Description |
+|---|---|---|---|
+| `POST` | `/api/upload/images` | JWT | Upload une image vers S3 |
+| `POST` | `/api/upload/videos` | JWT | Upload une vidéo vers S3 |
+| `POST` | `/api/upload/audios` | JWT | Upload un audio vers S3 |
 
-## Stay in touch
+> Envoyer un `multipart/form-data` avec le champ `file`.
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+### Groupes visiteurs
+| Méthode | Route | Auth | Description |
+|---|---|---|---|
+| `POST` | `/api/groups` | Non | Créer un groupe (participants + âges) |
+| `GET` | `/api/groups/:id` | Non | Récupérer un groupe et ses scores |
+| `PATCH` | `/api/groups/:id/score` | Non | Ajouter des points à un participant |
+| `PATCH` | `/api/groups/:id/module` | Non | Marquer un module comme visité |
+| `PATCH` | `/api/groups/:id/end` | Non | Terminer la visite |
 
-## License
+---
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+## Exemples de données
+
+### Créer un module
+```json
+POST /api/modules
+{
+  "number": 1,
+  "name": "Les Robots Sentinelles",
+  "cartel": "Découvrez les robots qui gardent l'expérience...",
+  "mediaType": "video",
+  "mediaUrl": "https://bucket.s3.eu-west-3.amazonaws.com/videos/uuid.mp4",
+  "images": ["https://bucket.s3.eu-west-3.amazonaws.com/images/uuid.jpg"],
+  "mapX": 0.42,
+  "mapY": 0.31,
+  "isVisible": true
+}
+```
+
+### Créer un groupe visiteur
+```json
+POST /api/groups
+{
+  "participants": [
+    { "name": "Martine", "age": 34 },
+    { "name": "Lucas", "age": 12 }
+  ]
+}
+```
+
+### Ajouter des points
+```json
+PATCH /api/groups/:id/score
+{
+  "participantName": "Martine",
+  "points": 100
+}
+```
+
+---
+
+## Structure du projet
+
+```
+src/
+├── modules/
+│   ├── auth/          → JWT, login admin
+│   ├── module/        → CRUD des modules d'exposition
+│   ├── upload/        → Upload S3 (images, vidéos, audios)
+│   └── group/         → Groupes visiteurs et scores
+└── main.ts            → Bootstrap NestJS
+```
+
+---
+
+## Build & production
+
+```bash
+pnpm build
+pnpm start:prod
+```
+
+### Déploiement (VPS / Railway / Render)
+
+1. Configurer les variables d'environnement sur la plateforme
+2. `pnpm build && pnpm start:prod`
+3. L'API écoute sur le port défini par `PORT`
+
+> En production, s'assurer que le bucket S3 autorise les requêtes CORS depuis le domaine admin.

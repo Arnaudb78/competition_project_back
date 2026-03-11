@@ -12,7 +12,7 @@ export class GroupService {
   ) {}
 
   create(dto: CreateGroupDto) {
-    const participants = dto.participants.map((name) => ({ name, score: 0 }));
+    const participants = dto.participants.map((p) => ({ name: p.name, age: p.age, score: 0 }));
     return this.groupModel.create({ participants });
   }
 

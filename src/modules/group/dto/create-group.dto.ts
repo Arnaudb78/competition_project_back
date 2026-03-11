@@ -1,5 +1,10 @@
+export class ParticipantDto {
+  name!: string;
+  age!: number;
+}
+
 export class CreateGroupDto {
-  participants!: string[]; // liste de prénoms
+  participants!: ParticipantDto[];
 }
 
 export class UpdateScoreDto {
