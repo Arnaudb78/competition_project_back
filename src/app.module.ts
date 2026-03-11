@@ -12,6 +12,7 @@ import { GroupModule } from './modules/group/group.module';
 import { QuestionModule } from './modules/question/question.module';
 import { ReplayModule } from './modules/replay/replay.module';
 import { ClipModule } from './modules/clip/clip.module';
+import { EventModule } from './modules/event/event.module';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { ClipModule } from './modules/clip/clip.module';
     QuestionModule,
     ReplayModule,
     ClipModule,
+    EventModule,
   ],
   controllers: [AppController],
   providers: [AppService],
