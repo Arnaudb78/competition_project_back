@@ -8,6 +8,7 @@ import { UserModule } from './modules/user/user.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { UploadModule } from './modules/upload/upload.module';
 import { AccountModule } from './modules/account/account.module';
+import { GroupModule } from './modules/group/group.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { AccountModule } from './modules/account/account.module';
     AuthModule,
     UploadModule,
     AccountModule,
+    GroupModule,
   ],
   controllers: [AppController],
   providers: [AppService],
