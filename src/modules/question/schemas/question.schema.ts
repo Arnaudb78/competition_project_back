@@ -20,8 +20,8 @@ export class QuestionEntity {
     type: [{ text: String, isCorrect: Boolean }],
     required: true,
     validate: {
-      validator: (v: Answer[]) => v.length === 3,
-      message: 'Une question doit avoir exactement 3 réponses',
+      validator: (v: Answer[]) => v.length === 4,
+      message: 'Une question doit avoir exactement 4 réponses',
     },
   })
   answers!: Answer[];

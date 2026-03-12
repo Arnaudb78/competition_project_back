@@ -49,12 +49,16 @@ export class QuestionService {
   }
 
   private validateAnswers(answers: CreateQuestionDto['answers']) {
-    if (answers.length !== 3) {
-      throw new BadRequestException('Une question doit avoir exactement 3 réponses');
+    if (answers.length !== 4) {
+      throw new BadRequestException(
+        'Une question doit avoir exactement 4 réponses',
+      );
     }
     const correctCount = answers.filter((a) => a.isCorrect).length;
     if (correctCount !== 1) {
-      throw new BadRequestException('Une question doit avoir exactement 1 bonne réponse');
+      throw new BadRequestException(
+        'Une question doit avoir exactement 1 bonne réponse',
+      );
     }
   }
 }
