@@ -71,7 +71,7 @@ export class AccountService {
       const valid = await bcrypt.compare(dto.currentPassword, account.password);
       if (!valid)
         throw new UnauthorizedException('Mot de passe actuel incorrect');
-      account.password = dto.newPassword; // le hook pre('save') s'occupe du hash
+      account.password = dto.newPassword;
     }
 
     return account.save();
