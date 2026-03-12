@@ -13,6 +13,7 @@ import { QuestionModule } from './modules/question/question.module';
 import { ReplayModule } from './modules/replay/replay.module';
 import { ClipModule } from './modules/clip/clip.module';
 import { EventModule } from './modules/event/event.module';
+import { ChallengeModule } from './modules/challenge/challenge.module';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { EventModule } from './modules/event/event.module';
     ReplayModule,
     ClipModule,
     EventModule,
+    ChallengeModule,
   ],
   controllers: [AppController],
   providers: [AppService],

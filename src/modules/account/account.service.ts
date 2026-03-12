@@ -24,4 +24,12 @@ export class AccountService {
   async findById(id: string): Promise<AccountDocument | null> {
     return this.accountModel.findById(id).select('-password');
   }
+
+  async addTrophies(id: string, amount: number): Promise<AccountDocument | null> {
+    return this.accountModel.findByIdAndUpdate(
+      id,
+      { $inc: { trophies: amount } },
+      { new: true },
+    );
+  }
 }

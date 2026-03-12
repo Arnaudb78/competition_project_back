@@ -23,6 +23,9 @@ export class AccountEntity {
 
   @Prop({ default: true })
   isActive!: boolean;
+
+  @Prop({ default: 0 })
+  trophies!: number;
 }
 
 export const AccountSchema = SchemaFactory.createForClass(AccountEntity);
